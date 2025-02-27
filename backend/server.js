@@ -1,11 +1,12 @@
 import express from "express"
 import 'dotenv/config'
 import mongoose from "mongoose"
-import userRoutes from "./Routes/userRoutes.js"
 import passport from "passport"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 import session from "express-session"
-
+import userRoutes from "./Routes/userRoutes.js"
+import postRoutes from "./Routes/postRoutes.js"
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -24,8 +25,10 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(cors({ origin: '*', credentials: true }))
 
 app.use('/user', userRoutes)
+app.use('/post', postRoutes)
 app.get('/', (req, res) => {
   res.send('Hello from the server!')
 })
