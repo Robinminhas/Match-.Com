@@ -10,10 +10,11 @@ passport.deserializeUser(User.deserializeUser())
 
 router.post('/new', async (req, res) => {
     try{
-        const { profilePicture, fullname, email, gender, password, username, follower, following } = req.body
+        const { profilePicture, fullname, bio , email, gender, password, username, follower, following } = req.body
         const newUser = {
             profilePicture,
             fullname,
+            bio,
             email,
             gender,
             username,
@@ -44,5 +45,17 @@ router.post('/logout' , (req, res) => {
         res.status(200).json('logged out successfully')
     })
 })
+
+router.put('/profile/edit/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const { profilePicture, fullname , username, bio} = req.body
+        const updatedUser = await User.findByIdAndUpdate(id, { profilePicture, fullname, username, bio })
+        res.status(200).json("profile updated successfully")
+    } catch (error) {
+        res.status(500).json({"failed to edit" : error.message})
+    }
+})
+
 
 export default router
